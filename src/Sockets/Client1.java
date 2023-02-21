@@ -20,11 +20,27 @@ public class Client1 {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Who are you?");
             String username = scanner.nextLine();
-
             output.writeUTF(username);
             String receivedUsername = input.readUTF();
 
             System.out.println(receivedUsername);
+
+            String str = null;
+            while (!Objects.equals(str, "bye")){
+                str = scanner.nextLine();
+                if (str.equals("bye")){
+                    output.writeUTF(str);
+                    break;
+                }
+                if ((username.equals("admin")) && (str.equals("exit"))){
+                    break;
+                } else {
+                    output.writeUTF(str);
+                    String receivedStr = input.readUTF();
+                    System.out.println(receivedStr);
+                }
+            }
+
 
         } catch (IOException e) {
             e.printStackTrace();
