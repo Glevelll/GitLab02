@@ -1,8 +1,6 @@
 package Sockets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.util.Objects;
 import java.util.Scanner;
@@ -15,19 +13,18 @@ public class Client1 {
         try (
                 Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
                 DataInputStream input = new DataInputStream(socket.getInputStream());
-                DataOutputStream output  = new DataOutputStream(socket.getOutputStream())
+                DataOutputStream output = new DataOutputStream(socket.getOutputStream())
         ) {
-            Scanner scanner = new Scanner(System.in);
+            Scanner sc = new Scanner(System.in);
             System.out.println("Who are you?");
-            String username = scanner.nextLine();
+            String username = sc.nextLine();
             output.writeUTF(username);
             String receivedUsername = input.readUTF();
-
             System.out.println(receivedUsername);
 
             String str = null;
             while (!Objects.equals(str, "bye")){
-                str = scanner.nextLine();
+                str = sc.nextLine();
                 if (str.equals("bye")){
                     output.writeUTF(str);
                     break;
@@ -42,8 +39,9 @@ public class Client1 {
             }
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+
     }
 }

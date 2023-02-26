@@ -1,9 +1,8 @@
 package Sockets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Client2 {
@@ -14,19 +13,35 @@ public class Client2 {
         try (
                 Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
                 DataInputStream input = new DataInputStream(socket.getInputStream());
-                DataOutputStream output  = new DataOutputStream(socket.getOutputStream())
+                DataOutputStream output = new DataOutputStream(socket.getOutputStream())
         ) {
-            Scanner scanner = new Scanner(System.in);
+            Scanner sc = new Scanner(System.in);
             System.out.println("Who are you?");
-            String username = scanner.nextLine();
-
+            String username = sc.nextLine();
             output.writeUTF(username);
             String receivedUsername = input.readUTF();
-
             System.out.println(receivedUsername);
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            String str = null;
+            while (!Objects.equals(str, "bye")){
+                str = sc.nextLine();
+                if (str.equals("bye")){
+                    output.writeUTF(str);
+                    break;
+                }
+                if ((username.equals("admin")) && (str.equals("exit"))){
+                    break;
+                } else {
+                    output.writeUTF(str);
+                    String receivedStr = input.readUTF();
+                    System.out.println(receivedStr);
+                }
+            }
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+
     }
 }
